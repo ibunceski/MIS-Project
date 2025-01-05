@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "580907471269",
+    "project_id": "mis-seminarska-stockanalyzer",
+    "storage_bucket": "mis-seminarska-stockanalyzer.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:580907471269:android:a6eab9b91c81113d99584c",
+        "android_client_info": {
+          "package_name": "com.example.domashni_proekt"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQKYpviLuXmDEXcU8jlBDst5Uh8BjVpak"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
