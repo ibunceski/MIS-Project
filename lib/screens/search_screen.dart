@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../model/issuer.dart';
-import '../providers/issuer_data_provider.dart';
 import '../providers/stock_provider.dart';
 import 'details_screen.dart';
+import 'favorites_screen.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class SearchScreen extends StatefulWidget {
+  const SearchScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<SearchScreen> createState() => _SearchScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _SearchScreenState extends State<SearchScreen> {
   @override
   void initState() {
     super.initState();
@@ -116,34 +115,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                 displayStringForOption: (issuer) =>
                                     issuer.symbol,
                                 onSelected: (issuer) async {
-                                  try {
-                                    await Provider.of<IssuerDataProvider>(
-                                            context,
-                                            listen: false)
-                                        .fetchAnalysis(issuer.symbol);
-
-                                    await Provider.of<IssuerDataProvider>(
-                                            context,
-                                            listen: false)
-                                        .fetchStocksData(issuer.symbol);
-
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => DetailsScreen(
-                                          issuer: issuer,
-                                        ),
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => DetailsScreen(
+                                        issuer: issuer,
                                       ),
-                                    );
-                                  } catch (error) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content:
-                                            Text('Error fetching data: $error'),
-                                        backgroundColor: Colors.red,
-                                      ),
-                                    );
-                                  }
+                                    ),
+                                  );
                                 },
                                 fieldViewBuilder: (context, controller,
                                     focusNode, onFieldSubmitted) {
@@ -189,30 +168,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               );
                             },
                           ),
-                          const SizedBox(height: 16),
-                          Consumer<IssuerDataProvider>(
-                            builder: (context, issuerDataProvider, child) {
-                              if (issuerDataProvider.isLoading) {
-                                return Center(
-                                  child: Column(
-                                    children: [
-                                      const CircularProgressIndicator(),
-                                      const SizedBox(height: 16),
-                                      Text(
-                                        'Loading data...',
-                                        style: TextStyle(
-                                          color: Colors.grey[600],
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              } else {
-                                return const SizedBox.shrink();
-                              }
-                            },
-                          ),
                         ],
                       ),
                     ),
@@ -222,6 +177,19 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  const FavoritesScreen(), // Navigate to FavoritesScreen
+            ),
+          );
+        },
+        backgroundColor: Colors.blueAccent,
+        child: const Icon(Icons.star),
       ),
     );
   }

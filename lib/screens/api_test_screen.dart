@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../service/api/api_service.dart';
 
 class TestApiScreen extends StatefulWidget {
@@ -88,13 +87,13 @@ class _TestApiScreenState extends State<TestApiScreen> {
             _isLoading
                 ? CircularProgressIndicator()
                 : Expanded(
-              child: SingleChildScrollView(
-                child: Text(
-                  _result,
-                  style: TextStyle(fontSize: 16),
-                ),
-              ),
-            ),
+                    child: SingleChildScrollView(
+                      child: Text(
+                        _result,
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                  ),
           ],
         ),
       ),
