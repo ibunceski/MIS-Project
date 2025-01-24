@@ -1,23 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_state_provider.dart';
-import 'login_screen.dart';
+import 'auth/login_screen.dart';
 import 'search_screen.dart';
-import 'verify_email_screen.dart';
+import 'auth/verify_email_screen.dart';
 
 class MainScreen extends StatelessWidget {
-  const MainScreen({Key? key}) : super(key: key);
+  const MainScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final authState = Provider.of<AuthStateProvider>(context);
+    final authState = context.watch<AuthStateProvider>();
 
     if (authState.isLoading) {
-      return const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
+      return _buildLoadingScreen();
     }
 
     if (authState.currentUser == null) {
@@ -25,12 +21,23 @@ class MainScreen extends StatelessWidget {
     }
 
     if (!authState.currentUser!.isEmailVerified) {
-      final authStateProvider =
-          Provider.of<AuthStateProvider>(context, listen: false);
-      authStateProvider.sendEmailVerification();
+      _sendEmailVerification(context);
       return const VerifyEmailScreen();
     }
 
     return const SearchScreen();
+  }
+
+  Widget _buildLoadingScreen() {
+    return const Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+  }
+
+  void _sendEmailVerification(BuildContext context) {
+    final authStateProvider = context.read<AuthStateProvider>();
+    authStateProvider.sendEmailVerification();
   }
 }

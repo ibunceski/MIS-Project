@@ -23,6 +23,9 @@ class IssuerDataProvider with ChangeNotifier {
     notifyListeners();
     try {
       final res = await ApiService.getAnalysis(issuer);
+      if(res['nlp'] == 'No news found') {
+        res['nlp'] = [];
+      }
       _nlp = res['nlp'];
       _lstm = res['lstm'];
       _technical = res['technical'];

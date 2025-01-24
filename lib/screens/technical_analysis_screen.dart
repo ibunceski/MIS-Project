@@ -1,7 +1,9 @@
+import 'package:domashni_proekt/providers/issuer_data_provider.dart';
+import 'package:domashni_proekt/widgets/shared/signal_card.dart';
+import 'package:domashni_proekt/widgets/technical/analysis_table.dart';
+import 'package:domashni_proekt/widgets/technical/timeframe_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../providers/issuer_data_provider.dart';
 
 class TechnicalAnalysisScreen extends StatelessWidget {
   const TechnicalAnalysisScreen({super.key});
@@ -12,12 +14,26 @@ class TechnicalAnalysisScreen extends StatelessWidget {
 
     if (technicalData.isEmpty) {
       return Scaffold(
-        appBar: AppBar(title: const Text("Technical Analysis")),
+        appBar: AppBar(
+          title: const Text("Technical Analysis"),
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.blue.shade700, Colors.blue.shade400],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+          ),
+        ),
         body: const Center(
-          child: Text(
-            "There is not enough data for the Technical Analysis",
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16),
+          child: Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Text(
+              "There is not enough data for the Technical Analysis",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 16, color: Colors.grey),
+            ),
           ),
         ),
       );
@@ -85,7 +101,24 @@ class _TechnicalAnalysisContentState extends State<TechnicalAnalysisContent> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Technical Analysis'),
+        title: const Text(
+          "Technical Analysis",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+            fontSize: 24,
+          ),
+        ),
+        centerTitle: true,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.blue.shade700, Colors.blue.shade400],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -93,206 +126,21 @@ class _TechnicalAnalysisContentState extends State<TechnicalAnalysisContent> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildSignalCard(overallSignal),
+            SignalCard(signal: overallSignal),
             const SizedBox(height: 24),
-            _buildTimeframeButtons(),
+            TimeframeButtons(
+              initialTimeframe: timeframe,
+              onTimeframeChanged: (tf) => setState(() => timeframe = tf),
+            ),
             const SizedBox(height: 24),
-            _buildAnalysisTables(timeframeData),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSignalCard(String signal) {
-    Color signalColor;
-    IconData signalIcon;
-
-    switch (signal.toLowerCase()) {
-      case 'buy':
-        signalColor = Colors.green;
-        signalIcon = Icons.trending_up;
-        break;
-      case 'sell':
-        signalColor = Colors.red;
-        signalIcon = Icons.trending_down;
-        break;
-      default:
-        signalColor = Colors.orange;
-        signalIcon = Icons.trending_flat;
-    }
-
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          children: [
-            Icon(signalIcon, color: signalColor, size: 28),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Overall Signal',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    signal,
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: signalColor,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
+            AnalysisTable(
+              title: 'Moving Averages',
+              signals: getMovingAverages(timeframeData),
             ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTimeframeButtons() {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.grey.shade200,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      padding: const EdgeInsets.all(4),
-      child: Row(
-        children: ['daily', 'weekly', 'monthly'].map((tf) {
-          final isSelected = timeframe == tf;
-          return Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(4),
-              child: ElevatedButton(
-                onPressed: () => setState(() => timeframe = tf),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      isSelected ? Colors.white : Colors.transparent,
-                  foregroundColor: isSelected ? Colors.black : Colors.grey,
-                  elevation: isSelected ? 1 : 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                child: Text(
-                  tf[0].toUpperCase() + tf.substring(1),
-                  style: TextStyle(
-                    fontWeight:
-                        isSelected ? FontWeight.bold : FontWeight.normal,
-                  ),
-                ),
-              ),
-            ),
-          );
-        }).toList(),
-      ),
-    );
-  }
-
-  Widget _buildAnalysisTables(Map<String, dynamic> timeframeData) {
-    return Column(
-      children: [
-        _buildTableSection(
-          'Moving Averages',
-          getMovingAverages(timeframeData),
-        ),
-        const SizedBox(height: 24),
-        _buildTableSection(
-          'Oscillators',
-          getOscillators(timeframeData),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildTableSection(String title, Map<String, String> signals) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 16),
-            Table(
-              columnWidths: const {
-                0: FlexColumnWidth(1.2),
-                1: FlexColumnWidth(0.8),
-              },
-              children: [
-                const TableRow(
-                  decoration: BoxDecoration(
-                    border: Border(bottom: BorderSide(color: Colors.grey)),
-                  ),
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 8),
-                      child: Text(
-                        'Indicator',
-                        style: TextStyle(fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 8),
-                      child: Text(
-                        'Signal',
-                        style: TextStyle(fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                  ],
-                ),
-                ...signals.entries.map((entry) {
-                  Color signalColor;
-                  switch (entry.value.toLowerCase()) {
-                    case 'buy':
-                      signalColor = Colors.green;
-                      break;
-                    case 'sell':
-                      signalColor = Colors.red;
-                      break;
-                    default:
-                      signalColor = Colors.orange;
-                  }
-
-                  return TableRow(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        child: Text(entry.key),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        child: Text(
-                          entry.value,
-                          style: TextStyle(
-                            color: signalColor,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ],
-                  );
-                }),
-              ],
+            const SizedBox(height: 24),
+            AnalysisTable(
+              title: 'Oscillators',
+              signals: getOscillators(timeframeData),
             ),
           ],
         ),

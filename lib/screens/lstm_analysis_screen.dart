@@ -1,8 +1,10 @@
+import 'package:domashni_proekt/providers/issuer_data_provider.dart';
+import 'package:domashni_proekt/widgets/graph/line_chart.dart';
+import 'package:domashni_proekt/widgets/lstm/legend_item.dart';
+import 'package:domashni_proekt/widgets/lstm/percentage_chip.dart';
+import 'package:domashni_proekt/widgets/shared/signal_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:fl_chart/fl_chart.dart';
-
-import '../providers/issuer_data_provider.dart';
 
 class LSTMAnalysisScreen extends StatelessWidget {
   const LSTMAnalysisScreen({super.key});
@@ -39,7 +41,17 @@ class LSTMAnalysisScreen extends StatelessWidget {
         "LSTM Analysis",
         style: TextStyle(
           fontWeight: FontWeight.w600,
-          fontSize: 20,
+          fontSize: 24,
+          color: Colors.white,
+        ),
+      ),
+      flexibleSpace: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.blue.shade700, Colors.blue.shade400],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
         ),
       ),
     );
@@ -124,7 +136,17 @@ class _LSTMAnalysisContentState extends State<LSTMAnalysisContent> {
           "LSTM Analysis",
           style: TextStyle(
             fontWeight: FontWeight.w600,
-            fontSize: 20,
+            fontSize: 24,
+            color: Colors.white,
+          ),
+        ),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.blue.shade700, Colors.blue.shade400],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
           ),
         ),
       ),
@@ -134,273 +156,52 @@ class _LSTMAnalysisContentState extends State<LSTMAnalysisContent> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildSignalCard(),
+              SignalCard(signal: signal),
               const SizedBox(height: 24),
-              _buildLegend(),
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  LegendItem(label: 'Actual Prices', color: Colors.blue),
+                  SizedBox(width: 16),
+                  LegendItem(label: 'Predicted Prices', color: Colors.green),
+                ],
+              ),
               const SizedBox(height: 8),
-              _buildChartSection(),
+              LineChartSection(graphData: graphData, yAxisDomain: yAxisDomain),
               const SizedBox(height: 24),
-              _buildDailyPercentageSection(),
+              Card(
+                elevation: 2,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Daily Percentage Changes',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: dailyPercent
+                            .map((day) => PercentageChip(day: day))
+                            .toList(),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildSignalCard() {
-    Color signalColor;
-    IconData signalIcon;
-
-    switch (signal.toLowerCase()) {
-      case 'bullish':
-        signalColor = Colors.green;
-        signalIcon = Icons.trending_up;
-        break;
-      case 'bearish':
-        signalColor = Colors.red;
-        signalIcon = Icons.trending_down;
-        break;
-      default:
-        signalColor = Colors.grey;
-        signalIcon = Icons.trending_flat;
-    }
-
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          children: [
-            Icon(signalIcon, color: signalColor, size: 28),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Market Signal',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    signal,
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: signalColor,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildLegend() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _buildLegendItem('Actual Prices', Colors.blue),
-        const SizedBox(width: 16),
-        _buildLegendItem('Predicted Prices', Colors.green),
-      ],
-    );
-  }
-
-  Widget _buildLegendItem(String label, Color color) {
-    return Row(
-      children: [
-        Container(
-          width: 12,
-          height: 12,
-          decoration: BoxDecoration(
-            color: color,
-            borderRadius: BorderRadius.circular(3),
-          ),
-        ),
-        const SizedBox(width: 8),
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 14,
-            color: Colors.grey,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildDailyPercentageSection() {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Daily Percentage Changes',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 16),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children:
-                  dailyPercent.map((day) => _buildPercentageChip(day)).toList(),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPercentageChip(String day) {
-    final percentage = double.tryParse(day
-            .split('(')[1]
-            .split(')')[0]
-            .replaceAll('%', '')
-            .replaceAll('+', '')) ??
-        0.0;
-
-    final isPositive = day.contains('+');
-    final color = isPositive ? Colors.green : Colors.red;
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withOpacity(0.3)),
-      ),
-      child: Text(
-        day,
-        style: TextStyle(
-          color: color,
-          fontWeight: FontWeight.w500,
-          fontSize: 14,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildChartSection() {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: SizedBox(
-          height: 300,
-          child: LineChart(_buildLineChart()),
-        ),
-      ),
-    );
-  }
-
-  LineChartData _buildLineChart() {
-    final firstDate = graphData.first['date'] as DateTime;
-    final lastDate = graphData.last['date'] as DateTime;
-    final daysDifference = lastDate.difference(firstDate).inDays;
-    final interval =
-        Duration(days: (daysDifference / 5).ceil()).inMilliseconds.toDouble();
-
-    return LineChartData(
-      gridData: FlGridData(
-        show: true,
-        drawVerticalLine: true,
-        getDrawingHorizontalLine: (value) => FlLine(
-          color: Colors.grey.withOpacity(0.1),
-          strokeWidth: 1,
-        ),
-      ),
-      titlesData: FlTitlesData(
-        leftTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: true,
-            interval: (yAxisDomain[1] - yAxisDomain[0]) / 4,
-            getTitlesWidget: (value, meta) {
-              return Text(
-                value.toStringAsFixed(1),
-                style: const TextStyle(fontSize: 10),
-              );
-            },
-            reservedSize: 28,
-          ),
-        ),
-        bottomTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: true,
-            interval: interval,
-            getTitlesWidget: (value, meta) {
-              final date = DateTime.fromMillisecondsSinceEpoch(value.toInt());
-              return Text(
-                "${date.day}/${date.month}",
-                style: const TextStyle(fontSize: 10),
-              );
-            },
-            reservedSize: 22,
-          ),
-        ),
-        rightTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        topTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-      ),
-      borderData: FlBorderData(show: false),
-      minX: graphData.first['date'].millisecondsSinceEpoch.toDouble(),
-      maxX: graphData.last['date'].millisecondsSinceEpoch.toDouble(),
-      minY: yAxisDomain[0],
-      maxY: yAxisDomain[1],
-      lineBarsData: [
-        LineChartBarData(
-          spots: graphData
-              .where((item) => item['actual'] != null)
-              .map((item) => FlSpot(
-                  item['date'].millisecondsSinceEpoch.toDouble(),
-                  item['actual']))
-              .toList(),
-          isCurved: true,
-          color: Colors.blue,
-          barWidth: 2,
-          dotData: const FlDotData(show: false),
-        ),
-        LineChartBarData(
-          spots: graphData
-              .where((item) => item['predicted'] != null)
-              .map((item) => FlSpot(
-                    item['date'].millisecondsSinceEpoch.toDouble(),
-                    double.parse(item['predicted'].toStringAsFixed(1)),
-                  ))
-              .toList(),
-          isCurved: true,
-          color: Colors.green,
-          barWidth: 2,
-          dotData: const FlDotData(show: false),
-        ),
-      ],
     );
   }
 }

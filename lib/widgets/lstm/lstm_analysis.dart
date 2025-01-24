@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 class LSTMAnalysis extends StatefulWidget {
   final Map<String, dynamic> data;
 
-  const LSTMAnalysis({Key? key, required this.data}) : super(key: key);
+  const LSTMAnalysis({super.key, required this.data});
 
   @override
   State<LSTMAnalysis> createState() => _LSTMAnalysisState();
