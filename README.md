@@ -1,16 +1,31 @@
-# domashni_proekt
+# Мобилни Информациски Системи - Домашна задача 2
 
-A new Flutter project.
+## Macedonian Market Pulse - Мобилна Апликација за Анализа на Македонската Берза
 
-## Getting Started
+### Преглед
+Оваа домашна задача вклучува развивање на мобилна апликација за анализа на податоците од македонската берза. Апликацијата се поврзува со backend сервис кој ги обработува и обезбедува потребните податоци за правилно функционирање на апликацијата.
 
-This project is a starting point for a Flutter application.
+### Предуслови
+За правилно функционирање, потребно е локално да го поставите backend сервисот. Репозиториумот на backend-от е достапен на следниот линк:
 
-A few resources to get you started if this is your first Flutter project:
+**[Backend Репозиториум](https://github.com/ibunceski/MIS-SeminarskaBackend)**
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Инструкции
+Backend-от е контејнеризиран. Следете ги овие чекори за да го поставите backend-от:
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+1. Клонирајте го репозиториумот на backend-от:
+   ```bash
+   git clone https://github.com/ibunceski/MIS-SeminarskaBackend
+   ```
+2. Навигирајте до директориумот на проектот:
+   ```bash
+   cd MIS-SeminarskaBackend
+   ```
+3. Стартувајте го backend сервисот со Docker Compose:
+   ```bash
+   docker compose up
+   ```
+
+### Употреба
+Откако backend сервисот ќе биде стартуван, можете веднаш да ја користите мобилната апликација.
+
