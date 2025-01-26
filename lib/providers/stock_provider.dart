@@ -24,6 +24,8 @@ class StockProvider with ChangeNotifier {
       await fetchIssuers();
     } catch (e) {
       print('Error updating data: $e');
+    } finally {
+      notifyListeners();
     }
   }
 }

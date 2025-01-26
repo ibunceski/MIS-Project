@@ -1,5 +1,6 @@
 import 'package:domashni_proekt/widgets/search/custom_search_field.dart';
 import 'package:domashni_proekt/widgets/search/header_section.dart';
+import 'package:domashni_proekt/widgets/search/loading_dialog.dart';
 import 'package:domashni_proekt/widgets/search/search_section.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +19,7 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _searchController = TextEditingController();
   final FocusNode _searchFocusNode = FocusNode();
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -59,75 +61,97 @@ class _SearchScreenState extends State<SearchScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.update, color: Colors.white),
-            onPressed: () {
-              Provider.of<StockProvider>(context, listen: false).updateData();
+            onPressed: () async {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) => const LoadingDialog(),
+              );
+
+              await Provider.of<StockProvider>(context, listen: false).updateData();
+
+              if (mounted) {
+                Navigator.of(context).pop();
+              }
             },
           ),
         ],
       ),
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.blue.shade50, Colors.blue.shade100],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              const HeaderSection(),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SearchSection(),
-                    const SizedBox(height: 20),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(15),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.2),
-                            spreadRadius: 2,
-                            blurRadius: 10,
-                            offset: const Offset(0, 4),
+      body: Stack(
+        children: [
+          Container(
+            width: double.infinity,
+            height: double.infinity,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.blue.shade50, Colors.blue.shade100],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const HeaderSection(),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SearchSection(),
+                        const SizedBox(height: 20),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.2),
+                                spreadRadius: 2,
+                                blurRadius: 10,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Consumer<StockProvider>(
-                          builder: (context, stockProvider, _) {
-                            return CustomSearchField(
-                              controller: _searchController,
-                              focusNode: _searchFocusNode,
-                              onSelected: (issuer) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => DetailsScreen(
-                                      issuer: issuer,
-                                    ),
-                                  ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Consumer<StockProvider>(
+                              builder: (context, stockProvider, _) {
+                                return CustomSearchField(
+                                  controller: _searchController,
+                                  focusNode: _searchFocusNode,
+                                  onSelected: (issuer) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => DetailsScreen(
+                                          issuer: issuer,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  issuers: stockProvider.issuers,
                                 );
                               },
-                              issuers: stockProvider.issuers,
-                            );
-                          },
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
+          if (_isLoading)
+            Container(
+              color: Colors.black.withOpacity(0.5),
+              child: const Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
+        ],
       ),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
