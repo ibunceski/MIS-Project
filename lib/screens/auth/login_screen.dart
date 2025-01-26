@@ -29,7 +29,6 @@ class _LoginScreenState extends State<LoginScreen> {
         _passwordController.text.trim(),
       );
 
-      // Navigate to the MainScreen after successful login
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (_) => const MainScreen(),
@@ -75,7 +74,6 @@ class _LoginScreenState extends State<LoginScreen> {
         elevation: 0,
       ),
       body: Container(
-        // Ensure the gradient covers the entire screen
         height: double.infinity,
         width: double.infinity,
         decoration: BoxDecoration(
@@ -89,7 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
           padding: const EdgeInsets.all(24.0),
           child: ConstrainedBox(
             constraints: BoxConstraints(
-              minHeight: MediaQuery.of(context).size.height, // Ensure the content takes up at least the full screen height
+              minHeight: MediaQuery.of(context).size.height,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -139,7 +137,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: TextStyle(color: Colors.blue.shade700),
                   ),
                 ),
-                // Add an empty SizedBox to push the content to the top
                 const SizedBox(height: 24),
               ],
             ),

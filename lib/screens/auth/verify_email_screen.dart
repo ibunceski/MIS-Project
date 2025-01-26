@@ -82,7 +82,6 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
         elevation: 0,
       ),
       body: Container(
-        // Ensure the gradient covers the entire screen
         height: double.infinity,
         width: double.infinity,
         decoration: BoxDecoration(
@@ -136,7 +135,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                 backgroundColor: Colors.grey[300],
                 textColor: Colors.black,
               ),
-              const SizedBox(height: 40), // Add extra space at the bottom
+              const SizedBox(height: 40),
             ],
           ),
         ),

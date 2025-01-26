@@ -62,7 +62,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         elevation: 0,
       ),
       body: Container(
-        // Ensure the gradient covers the entire screen
         height: double.infinity,
         width: double.infinity,
         decoration: BoxDecoration(
@@ -76,7 +75,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           padding: const EdgeInsets.all(24.0),
           child: ConstrainedBox(
             constraints: BoxConstraints(
-              minHeight: MediaQuery.of(context).size.height, // Ensure the content takes up at least the full screen height
+              minHeight: MediaQuery.of(context).size.height,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -118,7 +117,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   onPressed: _register,
                   isLoading: _isLoading,
                 ),
-                // Add an empty SizedBox to push the content to the top
                 const SizedBox(height: 24),
               ],
             ),

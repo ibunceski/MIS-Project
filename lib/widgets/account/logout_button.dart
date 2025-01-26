@@ -11,7 +11,6 @@ class LogoutButton extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () {
-          // Log out the user
           context.read<AuthStateProvider>().logOut();
         },
         style: ElevatedButton.styleFrom(

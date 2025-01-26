@@ -133,7 +133,7 @@ class _SearchScreenState extends State<SearchScreen> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FloatingActionButton(
-            heroTag: 'account_fab', // Unique hero tag
+            heroTag: 'account_fab',
             onPressed: () {
               Navigator.push(
                 context,
@@ -142,13 +142,13 @@ class _SearchScreenState extends State<SearchScreen> {
                 ),
               );
             },
-            backgroundColor: Colors.blue.shade700, // Darker blue
+            backgroundColor: Colors.blue.shade700,
             mini: true,
             child: const Icon(Icons.person, color: Colors.white),
           ),
           const SizedBox(width: 10),
           FloatingActionButton(
-            heroTag: 'favorites_fab', // Unique hero tag
+            heroTag: 'favorites_fab',
             onPressed: () {
               Navigator.push(
                 context,
@@ -157,7 +157,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 ),
               );
             },
-            backgroundColor: Colors.blue.shade700, // Darker blue
+            backgroundColor: Colors.blue.shade700,
             child: const Icon(Icons.star, color: Colors.white),
           ),
         ],

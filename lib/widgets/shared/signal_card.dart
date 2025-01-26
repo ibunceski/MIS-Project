@@ -41,12 +41,12 @@ class SignalCard extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(16), // Slightly larger radius
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
             color: gradientEndColor.withOpacity(0.5),
-            blurRadius: 15, // Increased blur for a softer shadow
-            offset: const Offset(0, 6), // Slightly larger offset
+            blurRadius: 15,
+            offset: const Offset(0, 6),
           ),
         ],
       ),
@@ -55,7 +55,7 @@ class SignalCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: signalColor.withOpacity(0.1), // Subtle icon background
+              color: signalColor.withOpacity(0.1),
               shape: BoxShape.circle,
             ),
             child: Icon(
@@ -84,7 +84,7 @@ class SignalCard extends StatelessWidget {
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                     color: signalColor,
-                    letterSpacing: 1.2, // Added letter spacing for emphasis
+                    letterSpacing: 1.2,
                   ),
                 ),
               ],

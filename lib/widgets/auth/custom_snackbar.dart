@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 void showCustomSnackBar(BuildContext context, String message, {bool isError = false}) {
-  // Define colors and icons based on the message type
   final Color backgroundColor = isError ? Colors.red.shade600 : Colors.green.shade600;
   final IconData icon = isError ? Icons.error_outline : Icons.check_circle_outline;
 
@@ -9,8 +8,8 @@ void showCustomSnackBar(BuildContext context, String message, {bool isError = fa
     SnackBar(
       content: Row(
         children: [
-          Icon(icon, color: Colors.white), // Add an icon
-          const SizedBox(width: 12), // Add spacing between the icon and text
+          Icon(icon, color: Colors.white),
+          const SizedBox(width: 12),
           Expanded(
             child: Text(
               message,
@@ -23,14 +22,14 @@ void showCustomSnackBar(BuildContext context, String message, {bool isError = fa
           ),
         ],
       ),
-      backgroundColor: backgroundColor, // Custom background color
-      behavior: SnackBarBehavior.floating, // Make the snackbar float
+      backgroundColor: backgroundColor,
+      behavior: SnackBarBehavior.floating,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10), // Rounded corners
+        borderRadius: BorderRadius.circular(10),
       ),
-      duration: const Duration(seconds: 3), // Adjust the duration
-      margin: const EdgeInsets.all(16), // Add margin for floating behavior
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12), // Add padding
+      duration: const Duration(seconds: 3),
+      margin: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
     ),
   );
 }

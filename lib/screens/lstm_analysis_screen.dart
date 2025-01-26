@@ -89,7 +89,6 @@ class _LSTMAnalysisContentState extends State<LSTMAnalysisContent> {
         .map((price) => price.toDouble())
         .toList();
 
-    // Combine actual and predicted data
     final actualData = List.generate(recentDates.length, (index) {
       return {
         'date': DateTime.parse(recentDates[index]),
@@ -108,7 +107,6 @@ class _LSTMAnalysisContentState extends State<LSTMAnalysisContent> {
 
     graphData = [...actualData, ...predictedData];
 
-    // Determine y-axis domain
     final prices = graphData
         .map((item) => item['actual'] ?? item['predicted'])
         .where((price) => price != null)
@@ -121,7 +119,6 @@ class _LSTMAnalysisContentState extends State<LSTMAnalysisContent> {
 
     yAxisDomain = [minPrice, maxPrice];
 
-    // Daily percent and signal
     dailyPercent = List<String>.from(widget.data['dailyPercent']);
     signal = widget.data['signal'] as String;
   }

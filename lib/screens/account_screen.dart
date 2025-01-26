@@ -35,10 +35,8 @@ class AccountScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Fetch the current user from the AuthStateProvider
     final user = context.watch<AuthStateProvider>().currentUser;
 
-    // If the user is null (after logout), navigate to the LoginScreen
     if (user == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.of(context).pushReplacement(

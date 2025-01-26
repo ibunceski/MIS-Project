@@ -84,7 +84,7 @@ class _StockDataTableState extends State<StockDataTable> {
             ),
             columns: _buildColumns(isExpanded),
             source: _StockDataSource(widget.jsonData, isExpanded),
-            rowsPerPage: 10, // Adjust rows per page as needed
+            rowsPerPage: 10,
           ),
         ),
       ],
