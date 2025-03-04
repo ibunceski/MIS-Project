@@ -1,13 +1,14 @@
+import 'package:domashni_proekt/model/issuer.dart';
+import 'package:domashni_proekt/providers/issuer_data_provider.dart';
+import 'package:domashni_proekt/service/storage/cloud_favorite.dart';
+import 'package:domashni_proekt/service/storage/firebase_cloud_storage.dart';
 import 'package:domashni_proekt/widgets/details/analysis_section.dart';
 import 'package:domashni_proekt/widgets/details/graph_section.dart';
 import 'package:domashni_proekt/widgets/details/stock_data_section.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../model/issuer.dart';
-import '../providers/issuer_data_provider.dart';
-import '../service/storage/firebase_cloud_storage.dart';
-import '../service/storage/cloud_favorite.dart';
+
 
 class DetailsScreen extends StatefulWidget {
   final Issuer issuer;

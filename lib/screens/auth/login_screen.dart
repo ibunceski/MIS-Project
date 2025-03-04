@@ -1,12 +1,11 @@
 import 'package:domashni_proekt/providers/auth_state_provider.dart';
-import 'package:domashni_proekt/screens/auth/forgot_password_screen.dart';
-import 'package:domashni_proekt/screens/auth/register_screen.dart';
-import 'package:domashni_proekt/screens/main_screen.dart';
 import 'package:domashni_proekt/widgets/auth/custom_button.dart';
 import 'package:domashni_proekt/widgets/auth/custom_snackbar.dart';
 import 'package:domashni_proekt/widgets/auth/custom_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../service/auth/auth_exceptions.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -30,34 +29,25 @@ class _LoginScreenState extends State<LoginScreen> {
         _passwordController.text.trim(),
       );
 
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (_) => const MainScreen(),
-        ),
-      );
-    } catch (e) {
-      showCustomSnackBar(context, e.toString());
-    } finally {
+      Navigator.pushReplacementNamed(context, "/");
+    } on InvalidCredentialsAuthException catch (e) {
+      showCustomSnackBar(context, "Incorrect credentials");
+    } on UserNotFoundAuthException catch (e) {
+      showCustomSnackBar(context, "User not found");
+    } on GenericAuthException catch (e) {
+      showCustomSnackBar(context, "An error occurred");
+    }
+    finally {
       setState(() => _isLoading = false);
     }
   }
 
   void _navigateToRegister() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (_) => const RegisterScreen(),
-      ),
-    );
+    Navigator.pushReplacementNamed(context, "/register");
   }
 
   void _navigateToForgot() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (_) => const ForgotPasswordScreen(),
-      ),
-    );
+    Navigator.pushReplacementNamed(context, "/forgot-password");
   }
 
   @override
@@ -106,17 +96,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 Text(
                   'Welcome Back!',
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue.shade900,
-                      ),
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blue.shade900,
+                  ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 8),
                 Text(
                   'Please sign in to continue',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Colors.blue.shade800,
-                      ),
+                    color: Colors.blue.shade800,
+                  ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 40),

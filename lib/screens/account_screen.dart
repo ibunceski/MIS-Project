@@ -3,7 +3,6 @@ import 'package:domashni_proekt/widgets/account/user_info.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:domashni_proekt/providers/auth_state_provider.dart';
-import 'package:domashni_proekt/screens/auth/login_screen.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
@@ -39,11 +38,7 @@ class AccountScreen extends StatelessWidget {
 
     if (user == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => const LoginScreen(),
-          ),
-        );
+        Navigator.pushReplacementNamed(context, "/login");
       });
     }
 

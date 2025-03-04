@@ -1,6 +1,3 @@
-import 'package:domashni_proekt/screens/fundamental_analysis_screen.dart';
-import 'package:domashni_proekt/screens/lstm_analysis_screen.dart';
-import 'package:domashni_proekt/screens/technical_analysis_screen.dart';
 import 'package:flutter/material.dart';
 
 class AnalysisSection extends StatelessWidget {
@@ -50,11 +47,9 @@ class AnalysisSection extends StatelessWidget {
                       end: Alignment.bottomRight,
                     ),
                     onTap: () {
-                      Navigator.push(
+                      Navigator.pushNamed(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => const TechnicalAnalysisScreen(),
-                        ),
+                        '/technical',
                       );
                     },
                   ),
@@ -66,11 +61,9 @@ class AnalysisSection extends StatelessWidget {
                       end: Alignment.bottomRight,
                     ),
                     onTap: () {
-                      Navigator.push(
+                      Navigator.pushNamed(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => const LSTMAnalysisScreen(),
-                        ),
+                        '/lstm',
                       );
                     },
                   ),
@@ -82,11 +75,9 @@ class AnalysisSection extends StatelessWidget {
                       end: Alignment.bottomRight,
                     ),
                     onTap: () {
-                      Navigator.push(
+                      Navigator.pushNamed(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => const FundamentalAnalysisScreen(),
-                        ),
+                        '/fundamental',
                       );
                     },
                   ),

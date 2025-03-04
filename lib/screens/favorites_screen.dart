@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../service/storage/firebase_cloud_storage.dart';
 import '../service/storage/cloud_favorite.dart';
 import '../model/issuer.dart';
-import 'details_screen.dart';
 
 class FavoritesScreen extends StatefulWidget {
   const FavoritesScreen({super.key});
@@ -138,14 +137,11 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                       onPressed: () => _removeFavorite(favorite.id),
                     ),
                     onTap: () {
-                      Navigator.push(
+                      Navigator.pushNamed(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => DetailsScreen(
-                            issuer: Issuer(
-                              symbol: favorite.symbol,
-                            ),
-                          ),
+                        '/details',
+                        arguments: Issuer(
+                          symbol: favorite.symbol,
                         ),
                       );
                     },

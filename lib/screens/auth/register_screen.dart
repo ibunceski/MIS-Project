@@ -1,5 +1,5 @@
 import 'package:domashni_proekt/providers/auth_state_provider.dart';
-import 'package:domashni_proekt/screens/auth/login_screen.dart';
+import 'package:domashni_proekt/service/auth/auth_exceptions.dart';
 import 'package:domashni_proekt/widgets/auth/custom_button.dart';
 import 'package:domashni_proekt/widgets/auth/custom_snackbar.dart';
 import 'package:domashni_proekt/widgets/auth/custom_text_field.dart';
@@ -28,8 +28,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
         _passwordController.text.trim(),
       );
       _navigateBack();
-    } catch (e) {
-      showCustomSnackBar(context, e.toString());
+    } on EmailAlreadyInUseAuthException catch (e) {
+      showCustomSnackBar(context, "The email is already in use");
+    } on InvalidEmailAuthException catch (e) {
+      showCustomSnackBar(context, "The email is invalid");
+    } on WeakPasswordAuthException catch (e) {
+      showCustomSnackBar(context, "The password is too weak");
+    } on GenericAuthException catch (e) {
+      showCustomSnackBar(context, "An error occurred");
     } finally {
       setState(() => _isLoading = false);
     }
@@ -40,12 +46,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void _navigateToLogin() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (_) => const LoginScreen(),
-      ),
-    );
+    Navigator.pushReplacementNamed(context, "/login");
   }
 
   @override
@@ -94,17 +95,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 Text(
                   'Create an Account',
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue.shade900,
-                  ),
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue.shade900,
+                      ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 8),
                 Text(
                   'Please fill in the details to get started',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Colors.blue.shade800,
-                  ),
+                        color: Colors.blue.shade800,
+                      ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 40),

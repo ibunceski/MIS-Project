@@ -6,9 +6,6 @@ import 'package:domashni_proekt/widgets/search/search_section.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:domashni_proekt/providers/stock_provider.dart';
-import 'package:domashni_proekt/screens/details_screen.dart';
-import 'package:domashni_proekt/screens/favorites_screen.dart';
-import 'package:domashni_proekt/screens/account_screen.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -138,13 +135,10 @@ class _SearchScreenState extends State<SearchScreen> {
                                   onSelected: (issuer) {
                                     _clearIssuerData();
 
-                                    Navigator.push(
+                                    Navigator.pushNamed(
                                       context,
-                                      MaterialPageRoute(
-                                        builder: (context) => DetailsScreen(
-                                          issuer: issuer,
-                                        ),
-                                      ),
+                                      '/details',
+                                      arguments: issuer,
                                     );
                                   },
                                   issuers: stockProvider.issuers,
@@ -175,11 +169,9 @@ class _SearchScreenState extends State<SearchScreen> {
           FloatingActionButton(
             heroTag: 'account_fab',
             onPressed: () {
-              Navigator.push(
+              Navigator.pushNamed(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => const AccountScreen(),
-                ),
+                '/account',
               );
             },
             backgroundColor: Colors.blue.shade700,
@@ -190,11 +182,9 @@ class _SearchScreenState extends State<SearchScreen> {
           FloatingActionButton(
             heroTag: 'favorites_fab',
             onPressed: () {
-              Navigator.push(
+              Navigator.pushNamed(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => const FavoritesScreen(),
-                ),
+                '/favorites',
               );
             },
             backgroundColor: Colors.blue.shade700,
