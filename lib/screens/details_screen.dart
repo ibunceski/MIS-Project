@@ -82,9 +82,27 @@ class _DetailsScreenState extends State<DetailsScreen> {
     final issuerData = Provider.of<IssuerDataProvider>(context).issuerData;
 
     if (issuerData.isEmpty) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return Scaffold(
+        backgroundColor: Colors.blue.shade50,
+        body: Center(
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+          const CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.blue)),
+          const SizedBox(height: 20),
+          Text(
+            'Data is being prepared, please wait...',
+            style: TextStyle(
+              fontSize: 18,
+              color: Colors.blue.shade700,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          ],
+        ),
+      ),
+    );
     }
 
     return Scaffold(

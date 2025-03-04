@@ -1,6 +1,19 @@
+import 'package:domashni_proekt/model/issuer.dart';
 import 'package:domashni_proekt/providers/auth_state_provider.dart';
 import 'package:domashni_proekt/providers/issuer_data_provider.dart';
+import 'package:domashni_proekt/screens/account_screen.dart';
+import 'package:domashni_proekt/screens/auth/forgot_password_screen.dart';
+import 'package:domashni_proekt/screens/auth/login_screen.dart';
+import 'package:domashni_proekt/screens/auth/register_screen.dart';
+import 'package:domashni_proekt/screens/auth/verify_email_screen.dart';
+import 'package:domashni_proekt/screens/details_screen.dart';
+import 'package:domashni_proekt/screens/error_screen.dart';
+import 'package:domashni_proekt/screens/favorites_screen.dart';
+import 'package:domashni_proekt/screens/fundamental_analysis_screen.dart';
+import 'package:domashni_proekt/screens/lstm_analysis_screen.dart';
 import 'package:domashni_proekt/screens/main_screen.dart';
+import 'package:domashni_proekt/screens/search_screen.dart';
+import 'package:domashni_proekt/screens/technical_analysis_screen.dart';
 import 'package:domashni_proekt/service/auth/firebase_auth_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +53,44 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         useMaterial3: true,
       ),
-      home: const MainScreen(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const MainScreen(),
+        '/login': (context) => const LoginScreen(),
+        '/register': (context) => const RegisterScreen(),
+        '/forgot': (context) => const ForgotPasswordScreen(),
+        '/verify': (context) => const VerifyEmailScreen(),
+        '/account': (context) => const AccountScreen(),
+        '/favorites': (context) => const FavoritesScreen(),
+        '/fundamental': (context) => const FundamentalAnalysisScreen(),
+        '/lstm': (context) => const LSTMAnalysisScreen(),
+        '/technical': (context) => const TechnicalAnalysisScreen(),
+        '/search': (context) => const SearchScreen(),
+      },
+      onGenerateRoute: (settings) {
+        if (settings.name == '/details') {
+          final issuer = settings.arguments as Issuer?;
+          if (issuer != null) {
+            return MaterialPageRoute(
+              builder: (context) => DetailsScreen(issuer: issuer),
+            );
+          }
+          return MaterialPageRoute(
+            builder: (context) => ErrorScreen(
+              errorMessage: "There was a problem with selecting the issuer",
+              onRetry: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const SearchScreen(),
+                  ),
+                );
+              },
+            ),
+          );
+        }
+        return null;
+      },
     );
   }
 }

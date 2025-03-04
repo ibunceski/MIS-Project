@@ -147,8 +147,6 @@ class AccountScreen extends StatelessWidget {
                 },
               ),
               const SizedBox(height: 24),
-
-              // Logout Button
               const LogoutButton(),
             ],
           ),

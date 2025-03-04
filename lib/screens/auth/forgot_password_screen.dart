@@ -1,33 +1,31 @@
+import 'package:flutter/material.dart';
 import 'package:domashni_proekt/providers/auth_state_provider.dart';
-import 'package:domashni_proekt/screens/auth/login_screen.dart';
 import 'package:domashni_proekt/widgets/auth/custom_button.dart';
 import 'package:domashni_proekt/widgets/auth/custom_snackbar.dart';
 import 'package:domashni_proekt/widgets/auth/custom_text_field.dart';
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+class ForgotPasswordScreen extends StatefulWidget {
+  const ForgotPasswordScreen({super.key});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
 
-  Future<void> _register() async {
+  Future<void> _resetPassword() async {
     setState(() => _isLoading = true);
 
     try {
       final authState = context.read<AuthStateProvider>();
-      await authState.createUser(
-        _emailController.text.trim(),
-        _passwordController.text.trim(),
-      );
-      _navigateBack();
+      await authState.sendPasswordReset(_emailController.text.trim());
+
+      showCustomSnackBar(
+          context, 'Password reset email sent. Check your inbox.');
+      Navigator.pop(context);
     } catch (e) {
       showCustomSnackBar(context, e.toString());
     } finally {
@@ -35,25 +33,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
-  void _navigateBack() {
-    Navigator.pop(context);
-  }
-
-  void _navigateToLogin() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (_) => const LoginScreen(),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Register',
+          'Forgot Password',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.white,
@@ -92,19 +77,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
               children: [
                 const SizedBox(height: 40),
                 Text(
-                  'Create an Account',
+                  'Forgot Password?',
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue.shade900,
-                  ),
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue.shade900,
+                      ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Please fill in the details to get started',
+                  'Enter your email to reset your password',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Colors.blue.shade800,
-                  ),
+                        color: Colors.blue.shade800,
+                      ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 40),
@@ -114,24 +99,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   prefixIcon: Icons.email,
                   keyboardType: TextInputType.emailAddress,
                 ),
-                const SizedBox(height: 16),
-                CustomTextField(
-                  controller: _passwordController,
-                  labelText: 'Password',
-                  prefixIcon: Icons.lock,
-                  obscureText: true,
-                ),
                 const SizedBox(height: 24),
                 CustomButton(
-                  text: 'Register',
-                  onPressed: _register,
+                  text: 'Reset Password',
+                  onPressed: _resetPassword,
                   isLoading: _isLoading,
                 ),
                 const SizedBox(height: 16),
                 TextButton(
-                  onPressed: _navigateToLogin,
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                   child: Text(
-                    "Already have an account? Log in",
+                    'Back to Login',
                     style: TextStyle(color: Colors.blue.shade700),
                   ),
                 ),

@@ -1,3 +1,4 @@
+import 'package:domashni_proekt/providers/issuer_data_provider.dart';
 import 'package:domashni_proekt/widgets/search/custom_search_field.dart';
 import 'package:domashni_proekt/widgets/search/header_section.dart';
 import 'package:domashni_proekt/widgets/search/loading_dialog.dart';
@@ -26,6 +27,18 @@ class _SearchScreenState extends State<SearchScreen> {
     super.initState();
     Future.microtask(() =>
         Provider.of<StockProvider>(context, listen: false).fetchIssuers());
+    _clearIssuerData();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _clearIssuerData();
+  }
+
+  void _clearIssuerData() {
+    Provider.of<IssuerDataProvider>(context, listen: false).clearData();
+    print(Provider.of<IssuerDataProvider>(context, listen: false).issuerData);
   }
 
   @override
@@ -68,7 +81,8 @@ class _SearchScreenState extends State<SearchScreen> {
                 builder: (context) => const LoadingDialog(),
               );
 
-              await Provider.of<StockProvider>(context, listen: false).updateData();
+              await Provider.of<StockProvider>(context, listen: false)
+                  .updateData();
 
               if (mounted) {
                 Navigator.of(context).pop();
@@ -122,6 +136,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                   controller: _searchController,
                                   focusNode: _searchFocusNode,
                                   onSelected: (issuer) {
+                                    _clearIssuerData();
+
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(

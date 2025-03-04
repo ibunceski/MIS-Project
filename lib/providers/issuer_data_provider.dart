@@ -35,6 +35,13 @@ class IssuerDataProvider with ChangeNotifier {
     }
   }
 
+  void clearData() {
+    _nlp.clear();
+    _lstm.clear();
+    _technical.clear();
+    _issuerData.clear();
+  }
+
   Future<void> fetchStocksData(String issuer) async {
     _isLoading = true;
     notifyListeners();

@@ -1,4 +1,5 @@
 import 'package:domashni_proekt/providers/auth_state_provider.dart';
+import 'package:domashni_proekt/screens/auth/forgot_password_screen.dart';
 import 'package:domashni_proekt/screens/auth/register_screen.dart';
 import 'package:domashni_proekt/screens/main_screen.dart';
 import 'package:domashni_proekt/widgets/auth/custom_button.dart';
@@ -42,10 +43,19 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _navigateToRegister() {
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (_) => const RegisterScreen(),
+      ),
+    );
+  }
+
+  void _navigateToForgot() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const ForgotPasswordScreen(),
       ),
     );
   }
@@ -96,17 +106,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 Text(
                   'Welcome Back!',
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue.shade900,
-                  ),
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue.shade900,
+                      ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 8),
                 Text(
                   'Please sign in to continue',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Colors.blue.shade800,
-                  ),
+                        color: Colors.blue.shade800,
+                      ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 40),
@@ -134,6 +144,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   onPressed: _navigateToRegister,
                   child: Text(
                     "Don't have an account? Register",
+                    style: TextStyle(color: Colors.blue.shade700),
+                  ),
+                ),
+                TextButton(
+                  onPressed: _navigateToForgot,
+                  child: Text(
+                    "Forgot your password?",
                     style: TextStyle(color: Colors.blue.shade700),
                   ),
                 ),
