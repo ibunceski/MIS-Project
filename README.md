@@ -1,31 +1,50 @@
-# Мобилни Информациски Системи - Домашна задача 2
+# Mobile Information Systems - Project
 
-## Macedonian Market Pulse - Мобилна Апликација за Анализа на Македонската Берза
+## Macedonian Market Pulse - Mobile Application for Analysis of the Macedonian Stock Exchange
 
-### Преглед
-Оваа домашна задача вклучува развивање на мобилна апликација за анализа на податоците од македонската берза. Апликацијата се поврзува со backend сервис кој ги обработува и обезбедува потребните податоци за правилно функционирање на апликацијата.
+### Overview
+This project involves the development of a mobile application for analyzing data from the Macedonian stock exchange. The application connects to a backend service that processes and provides the necessary data for the proper functioning of the application.
 
-### Предуслови
-За правилно функционирање, потребно е локално да го поставите backend сервисот. Репозиториумот на backend-от е достапен на следниот линк:
+### Features
+- Display the list of stocks on the Macedonian stock exchange
+- Display the details for each stock
+- Display of a chart for daily price changes of stocks
+- Display of the latest news related to a stock
+- Tracking the user's favorite stocks
+- LSTM analysis for predicting the price of a stock
+- Fundamental analysis of stocks
+- Technical analysis of stocks
+- Custom UI Elements
+- Custom Theme
+- State Management with Provider
+- Authentication with Firebase
+- Error Handling
+- Location Services
+### Prerequisites
+For proper functioning, it is necessary to set up the backend service locally. The backend repository is available at the following link:
 
-**[Backend Репозиториум](https://github.com/ibunceski/MIS-SeminarskaBackend)**
+**[Backend Repository](https://github.com/ibunceski/MIS-SeminarskaBackend)**
 
-### Инструкции
-Backend-от е контејнеризиран. Следете ги овие чекори за да го поставите backend-от:
+### Instructions
+The backend is containerized. Follow these steps to set up the backend:
 
-1. Клонирајте го репозиториумот на backend-от:
+1. Clone the backend repository:
    ```bash
    git clone https://github.com/ibunceski/MIS-SeminarskaBackend
    ```
-2. Навигирајте до директориумот на проектот:
+2. Navigate to the project directory:
    ```bash
    cd MIS-SeminarskaBackend
    ```
-3. Стартувајте го backend сервисот со Docker Compose:
+3. Start the backend service with Docker Compose:
    ```bash
    docker compose up
    ```
 
-### Употреба
-Откако backend сервисот ќе биде стартуван, можете веднаш да ја користите мобилната апликација.
+### Usage
+Once the backend service is started, you can use the mobile application.
+
+### Authors
+- Ilija Buncheski - 221094
+- Milovan Kostojchinoski - 206014
 
