@@ -20,6 +20,12 @@ This project involves the development of a mobile application for analyzing data
 - Authentication with Firebase
 - Error Handling
 - Location Services
+
+### Technologies
+- Flutter
+- Dart
+- Firebase
+- Java(Spring Boot) & Python(FastAPI) for the backend and PostgreSQL for the database 
 ### Prerequisites
 For proper functioning, it is necessary to set up the backend service locally. The backend repository is available at the following link:
 
