@@ -25,7 +25,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
       showCustomSnackBar(
           context, 'Password reset email sent. Check your inbox.');
-      Navigator.pop(context);
+      Navigator.pushReplacementNamed(context, '/login');
     } catch (e) {
       showCustomSnackBar(context, e.toString());
     } finally {
@@ -108,7 +108,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 const SizedBox(height: 16),
                 TextButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    Navigator.pushReplacementNamed(context, '/login');
                   },
                   child: Text(
                     'Back to Login',

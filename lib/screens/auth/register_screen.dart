@@ -27,7 +27,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         _emailController.text.trim(),
         _passwordController.text.trim(),
       );
-      _navigateBack();
+      _navigateToLogin();
     } on EmailAlreadyInUseAuthException catch (e) {
       showCustomSnackBar(context, "The email is already in use");
     } on InvalidEmailAuthException catch (e) {
@@ -39,10 +39,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     } finally {
       setState(() => _isLoading = false);
     }
-  }
-
-  void _navigateBack() {
-    Navigator.pop(context);
   }
 
   void _navigateToLogin() {

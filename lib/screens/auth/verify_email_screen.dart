@@ -1,4 +1,5 @@
 import 'package:domashni_proekt/providers/auth_state_provider.dart';
+import 'package:domashni_proekt/widgets/account/logout_button.dart';
 import 'package:domashni_proekt/widgets/auth/custom_button.dart';
 import 'package:domashni_proekt/widgets/auth/custom_snackbar.dart';
 import 'package:flutter/material.dart';
@@ -49,6 +50,8 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
       showCustomSnackBar(context, e.toString());
     }
   }
+
+
 
   void _navigateToLogin() {
     Navigator.of(context).pushReplacementNamed('/login');
@@ -136,6 +139,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                 textColor: Colors.black,
               ),
               const SizedBox(height: 40),
+              const LogoutButton()
             ],
           ),
         ),

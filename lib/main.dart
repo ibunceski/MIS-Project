@@ -6,12 +6,12 @@ import 'package:domashni_proekt/screens/auth/forgot_password_screen.dart';
 import 'package:domashni_proekt/screens/auth/login_screen.dart';
 import 'package:domashni_proekt/screens/auth/register_screen.dart';
 import 'package:domashni_proekt/screens/auth/verify_email_screen.dart';
+import 'package:domashni_proekt/screens/auth/auth_wrapper.dart';
 import 'package:domashni_proekt/screens/details_screen.dart';
 import 'package:domashni_proekt/screens/error_screen.dart';
 import 'package:domashni_proekt/screens/favorites_screen.dart';
 import 'package:domashni_proekt/screens/fundamental_analysis_screen.dart';
 import 'package:domashni_proekt/screens/lstm_analysis_screen.dart';
-import 'package:domashni_proekt/screens/main_screen.dart';
 import 'package:domashni_proekt/screens/search_screen.dart';
 import 'package:domashni_proekt/screens/technical_analysis_screen.dart';
 import 'package:domashni_proekt/service/auth/firebase_auth_provider.dart';
@@ -20,7 +20,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
-import 'providers/stock_provider.dart';
 
 void main() async {
   final authProvider = FirebaseAuthProvider();
@@ -32,7 +31,6 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => StockProvider()),
         ChangeNotifierProvider(create: (_) => AuthStateProvider(authProvider)),
         ChangeNotifierProvider(create: (_) => IssuerDataProvider()),
       ],
@@ -53,9 +51,10 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         useMaterial3: true,
       ),
-      initialRoute: '/',
+      // home: const AuthWrapper()
+      initialRoute: "/",
       routes: {
-        '/': (context) => const MainScreen(),
+        '/': (context) => const AuthWrapper(),
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
         '/forgot-password': (context) => const ForgotPasswordScreen(),
@@ -76,17 +75,18 @@ class MyApp extends StatelessWidget {
             );
           }
           return MaterialPageRoute(
-            builder: (context) => ErrorScreen(
-              errorMessage: "There was a problem with selecting the issuer",
-              onRetry: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const SearchScreen(),
-                  ),
-                );
-              },
-            ),
+            builder: (context) =>
+                ErrorScreen(
+                  errorMessage: "There was a problem with selecting the issuer",
+                  onRetry: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const SearchScreen(),
+                      ),
+                    );
+                  },
+                ),
           );
         }
         return null;

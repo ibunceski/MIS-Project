@@ -1,11 +1,11 @@
 import 'package:domashni_proekt/providers/auth_state_provider.dart';
+import 'package:domashni_proekt/service/auth/auth_exceptions.dart';
 import 'package:domashni_proekt/widgets/auth/custom_button.dart';
 import 'package:domashni_proekt/widgets/auth/custom_snackbar.dart';
 import 'package:domashni_proekt/widgets/auth/custom_text_field.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../../service/auth/auth_exceptions.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -19,26 +19,80 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
 
+  @override
+  void initState() {
+    print("LoginScreen initialized");
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    print("LoginScreen disposed");
+    super.dispose();
+  }
+
+  bool isValidEmail(String email) {
+    return RegExp(
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(email);
+  }
+
   Future<void> _login() async {
+    final connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
+      if (mounted) {
+        showCustomSnackBar(context, "No internet connection");
+      }
+      return;
+    }
+
+    if (!isValidEmail(_emailController.text.trim())) {
+      if (mounted) {
+        showCustomSnackBar(context, "Please enter a valid email address");
+      }
+      return;
+    }
+
     setState(() => _isLoading = true);
 
     try {
+      print("Attempting login...");
       final authState = context.read<AuthStateProvider>();
+
       await authState.logIn(
         _emailController.text.trim(),
         _passwordController.text.trim(),
       );
 
-      Navigator.pushReplacementNamed(context, "/");
-    } on InvalidCredentialsAuthException catch (e) {
-      showCustomSnackBar(context, "Incorrect credentials");
-    } on UserNotFoundAuthException catch (e) {
-      showCustomSnackBar(context, "User not found");
-    } on GenericAuthException catch (e) {
-      showCustomSnackBar(context, "An error occurred");
-    }
-    finally {
-      setState(() => _isLoading = false);
+      if (authState.currentUser != null) {
+        if (mounted) {
+          Navigator.pushReplacementNamed(context, "/");
+        }
+      }
+    } on InvalidCredentialsAuthException {
+      print("InvalidCredentialsAuthException caught. Mounted: $mounted");
+      if (mounted) {
+        print("Context is valid. Showing SnackBar.");
+        showCustomSnackBar(context, "Incorrect credentials");
+      } else {
+        print("Context is invalid. SnackBar cannot be shown.");
+      }
+    } on GenericAuthException {
+      print("Generic auth exception caught");
+      if (mounted) {
+        showCustomSnackBar(context, "An error occurred");
+      }
+    } catch (e) {
+      print("Unexpected error: $e");
+      if (mounted) {
+        showCustomSnackBar(context, "An unexpected error occurred");
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
     }
   }
 
@@ -52,6 +106,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final authState = context.read<AuthStateProvider>();
+    if (authState.isLoading) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -96,17 +157,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 Text(
                   'Welcome Back!',
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue.shade900,
-                  ),
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue.shade900,
+                      ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 8),
                 Text(
                   'Please sign in to continue',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Colors.blue.shade800,
-                  ),
+                        color: Colors.blue.shade800,
+                      ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 40),

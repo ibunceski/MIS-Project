@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/auth_state_provider.dart';
-import 'auth/login_screen.dart';
-import 'search_screen.dart';
-import 'auth/verify_email_screen.dart';
+import '../../providers/auth_state_provider.dart';
+import 'login_screen.dart';
+import '../search_screen.dart';
+import 'verify_email_screen.dart';
 
-class MainScreen extends StatelessWidget {
-  const MainScreen({super.key});
+class AuthWrapper extends StatelessWidget {
+  const AuthWrapper({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +36,16 @@ class MainScreen extends StatelessWidget {
     );
   }
 
-  void _sendEmailVerification(BuildContext context) {
+  void _sendEmailVerification(BuildContext context) async {
     final authStateProvider = context.read<AuthStateProvider>();
-    authStateProvider.sendEmailVerification();
+    try {
+      await authStateProvider.sendEmailVerification();
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to send verification email: ${e.toString()}'),
+        ),
+      );
+    }
   }
 }

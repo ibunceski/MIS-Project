@@ -1,11 +1,14 @@
+import 'package:domashni_proekt/model/issuer.dart';
 import 'package:domashni_proekt/providers/issuer_data_provider.dart';
+import 'package:domashni_proekt/service/api/api_service.dart';
 import 'package:domashni_proekt/widgets/search/custom_search_field.dart';
 import 'package:domashni_proekt/widgets/search/header_section.dart';
 import 'package:domashni_proekt/widgets/search/loading_dialog.dart';
 import 'package:domashni_proekt/widgets/search/search_section.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
+
 import 'package:provider/provider.dart';
-import 'package:domashni_proekt/providers/stock_provider.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -18,12 +21,12 @@ class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _searchController = TextEditingController();
   final FocusNode _searchFocusNode = FocusNode();
   bool _isLoading = false;
+  List<Issuer> _issuers = [];
 
   @override
   void initState() {
     super.initState();
-    Future.microtask(() =>
-        Provider.of<StockProvider>(context, listen: false).fetchIssuers());
+    _fetchIssuers();
     _clearIssuerData();
   }
 
@@ -33,9 +36,39 @@ class _SearchScreenState extends State<SearchScreen> {
     _clearIssuerData();
   }
 
+  Future<void> _fetchIssuers() async {
+    try {
+      final List<dynamic> data = json.decode(await ApiService.getIssuers());
+      setState(() {
+        _issuers = data.map((json) => Issuer.fromJson(json)).toList();
+      });
+    } catch (e) {
+      print('Error fetching issuers: $e');
+    }
+  }
+
   void _clearIssuerData() {
     Provider.of<IssuerDataProvider>(context, listen: false).clearData();
     print(Provider.of<IssuerDataProvider>(context, listen: false).issuerData);
+  }
+
+  Future<void> _updateData() async {
+    setState(() => _isLoading = true);
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const LoadingDialog(),
+    );
+    try {
+      await ApiService.fillData();
+      await _fetchIssuers();
+    } catch (e) {
+      print('Error updating data: $e');
+    }
+    if (mounted) {
+      Navigator.of(context).pop();
+      setState(() => _isLoading = false);
+    }
   }
 
   @override
@@ -71,20 +104,7 @@ class _SearchScreenState extends State<SearchScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.update, color: Colors.white),
-            onPressed: () async {
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (context) => const LoadingDialog(),
-              );
-
-              await Provider.of<StockProvider>(context, listen: false)
-                  .updateData();
-
-              if (mounted) {
-                Navigator.of(context).pop();
-              }
-            },
+            onPressed: _updateData,
           ),
         ],
       ),
@@ -127,23 +147,18 @@ class _SearchScreenState extends State<SearchScreen> {
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
-                            child: Consumer<StockProvider>(
-                              builder: (context, stockProvider, _) {
-                                return CustomSearchField(
-                                  controller: _searchController,
-                                  focusNode: _searchFocusNode,
-                                  onSelected: (issuer) {
-                                    _clearIssuerData();
-
-                                    Navigator.pushNamed(
-                                      context,
-                                      '/details',
-                                      arguments: issuer,
-                                    );
-                                  },
-                                  issuers: stockProvider.issuers,
+                            child: CustomSearchField(
+                              controller: _searchController,
+                              focusNode: _searchFocusNode,
+                              onSelected: (issuer) {
+                                _clearIssuerData();
+                                Navigator.pushNamed(
+                                  context,
+                                  '/details',
+                                  arguments: issuer,
                                 );
                               },
+                              issuers: _issuers,
                             ),
                           ),
                         ),

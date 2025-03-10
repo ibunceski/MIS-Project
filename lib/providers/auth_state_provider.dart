@@ -14,7 +14,9 @@ class AuthStateProvider extends ChangeNotifier {
   }
 
   AuthUser? get currentUser => _currentUser;
+
   bool get isLoading => _isLoading;
+
   bool get isEmailVerified => _currentUser?.isEmailVerified ?? false;
 
   Future<void> _initialize() async {
@@ -30,10 +32,12 @@ class AuthStateProvider extends ChangeNotifier {
   }
 
   Future<void> logIn(String email, String password) async {
-    _setLoading(true);
+    // _setLoading(true);
     try {
-      _currentUser = await _authProvider.logIn(email: email, password: password);
+      _currentUser =
+          await _authProvider.logIn(email: email, password: password);
     } catch (e) {
+      _currentUser = null;
       rethrow;
     } finally {
       _setLoading(false);
@@ -43,7 +47,8 @@ class AuthStateProvider extends ChangeNotifier {
   Future<void> createUser(String email, String password) async {
     _setLoading(true);
     try {
-      _currentUser = await _authProvider.createUser(email: email, password: password);
+      _currentUser =
+          await _authProvider.createUser(email: email, password: password);
     } catch (e) {
       rethrow;
     } finally {
